@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D9BE1E921E7DFE4100A1A486 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9BE1E911E7DFE4100A1A486 /* main.cpp */; };
+		D9BE1E9F1E806CE200A1A486 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9BE1E9D1E806CE200A1A486 /* Main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,11 @@
 
 /* Begin PBXFileReference section */
 		D9BE1E8E1E7DFE4100A1A486 /* code2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = code2; sourceTree = BUILT_PRODUCTS_DIR; };
-		D9BE1E911E7DFE4100A1A486 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D9BE1E981E805B0D00A1A486 /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
+		D9BE1E991E805B3000A1A486 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		D9BE1E9B1E805FD600A1A486 /* matrices.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = matrices.txt; sourceTree = "<group>"; };
+		D9BE1E9D1E806CE200A1A486 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
+		D9BE1E9E1E806CE200A1A486 /* Main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Main.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +61,11 @@
 		D9BE1E901E7DFE4100A1A486 /* code2 */ = {
 			isa = PBXGroup;
 			children = (
-				D9BE1E911E7DFE4100A1A486 /* main.cpp */,
+				D9BE1E9D1E806CE200A1A486 /* Main.cpp */,
+				D9BE1E9E1E806CE200A1A486 /* Main.hpp */,
+				D9BE1E9B1E805FD600A1A486 /* matrices.txt */,
+				D9BE1E981E805B0D00A1A486 /* sources.txt */,
+				D9BE1E991E805B3000A1A486 /* Makefile */,
 			);
 			path = code2;
 			sourceTree = "<group>";
@@ -119,7 +127,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9BE1E921E7DFE4100A1A486 /* main.cpp in Sources */,
+				D9BE1E9F1E806CE200A1A486 /* Main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
