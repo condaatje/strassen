@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     }
     
     int flag = atoi(argv[1]);
-    int dimension = round_up_to_square(atoi(argv[2]));
+    int dimension = round_up_to_power_of_2(atoi(argv[2]));
     
     matrix M1 (dimension, vector<long long> (dimension, 0));
     matrix M2 (dimension, vector<long long> (dimension, 0));
@@ -62,37 +62,23 @@ int main(int argc, const char * argv[]) {
     }
     
     else if (flag == 1) {
-        //Just use a random matrix with dimensions as proposed
-        // Load matrix 1
+        // Just use a random matrix with dimensions as proposed
         
-        // TODO abstract into "randFill" helper function
-        for(int i = 0; i < dimension; i++) {
-            for(int j = 0; j < dimension; j++) {
-                M1[i][j] = (rand() % 1024) - (1024 / 2); // -512 through 512
-                //assert(M1[i][j] >= 0);
-            }
-        }
-        
-        // Load matrix 2
-        for(int i = 0; i < dimension; i++) {
-            for(int j = 0; j < dimension; j++) {
-                M2[i][j] = (rand() % 1024) - (1024 / 2); // -512 through 512
-            }
-        }
+        randFill(M1);
+        randFill(M2);
         
         matrix result = strass(M1, M2, dimension);
         matrix expected = mult(M1, M2);
         
-        // TODO reassess testing on the fly.
+        
         for(int i = 0; i < dimension; i++) {
             for(int j = 0; j < dimension; j++) {
+                // TODO reassess testing on the fly.
                 assert(result[i][j] == expected[i][j]);
-                //assert(result[i][j] >= 0);
             }
         }
         
-        printMatrix(result, dimension);
-        cout << nn;
+        cout << "Success!" << nn;
     }
     
     runTests();
