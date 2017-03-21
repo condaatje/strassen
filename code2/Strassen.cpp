@@ -11,14 +11,14 @@ using namespace std;
 matrix strass(matrix M1, matrix M2, int d) {
     // TODO Avoid excessive memory allocation and deallocation.
     // This requires some thinking. Will probably need to do it all in buffer(s).
-    matrix A (d / 2, vector<int> (d / 2, 0));
-    matrix B (d / 2, vector<int> (d / 2, 0));
-    matrix C (d / 2, vector<int> (d / 2, 0));
-    matrix D (d / 2, vector<int> (d / 2, 0));
-    matrix E (d / 2, vector<int> (d / 2, 0));
-    matrix F (d / 2, vector<int> (d / 2, 0));
-    matrix G (d / 2, vector<int> (d / 2, 0));
-    matrix H (d / 2, vector<int> (d / 2, 0));
+    matrix A (d / 2, vector<long long> (d / 2, 0));
+    matrix B (d / 2, vector<long long> (d / 2, 0));
+    matrix C (d / 2, vector<long long> (d / 2, 0));
+    matrix D (d / 2, vector<long long> (d / 2, 0));
+    matrix E (d / 2, vector<long long> (d / 2, 0));
+    matrix F (d / 2, vector<long long> (d / 2, 0));
+    matrix G (d / 2, vector<long long> (d / 2, 0));
+    matrix H (d / 2, vector<long long> (d / 2, 0));
     
     int dim = d / 2;
     
@@ -99,7 +99,7 @@ matrix strass(matrix M1, matrix M2, int d) {
     matrix CFDH = subt(subt(add(P5, P1), P3), P7); // CF + DH = P5 + P1 − P3 − P7
     
     
-    matrix result (d, vector<int> (d, 0));
+    matrix result (d, vector<long long> (d, 0));
     
     // Load output matrix
     // Load AEBG:

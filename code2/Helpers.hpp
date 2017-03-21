@@ -5,11 +5,11 @@
 #include <vector>
 
 using namespace std;
-using matrix = vector<vector<int>>;
+using matrix = vector<vector<long long>>;
 
-matrix subt(vector<vector<int>> M1, vector<vector<int>> M2);
-matrix add(vector<vector<int>> M1, vector<vector<int>> M2);
-matrix mult(vector<vector<int>> M1, vector<vector<int>> M2);
+matrix subt(vector<vector<long long>> M1, vector<vector<long long>> M2);
+matrix add(vector<vector<long long>> M1, vector<vector<long long>> M2);
+matrix mult(vector<vector<long long>> M1, vector<vector<long long>> M2);
 
 #endif /* Helpers_hpp */
 

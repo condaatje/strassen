@@ -17,6 +17,7 @@ int main(int argc, const char * argv[]) {
     
     if(argc != 4) {
         cout << "Usage: ./strassen <flag> <dimension> <inputfile>" << nn;
+        cout << "0: Staff, 1: Random" << nn;
         // TODO what flags do we like?
         
         return 1;
@@ -24,25 +25,24 @@ int main(int argc, const char * argv[]) {
     
     int flag = atoi(argv[1]);
     int dimension = atoi(argv[2]);
-    ifstream matrixFile (argv[3]);
-    
-    if (!matrixFile.is_open()) {
-        cout << "Error: Could not open infile!" << nn;
-        return 1;
-    }
-    
-    string line;
-    matrix M1 (dimension, vector<int> (dimension, 0));
-    matrix M2 (dimension, vector<int> (dimension, 0));
-    
+    matrix M1 (dimension, vector<long long> (dimension, 0));
+    matrix M2 (dimension, vector<long long> (dimension, 0));
+
     if (flag == 0) {
+        ifstream matrixFile (argv[3]);
         
+        if (!matrixFile.is_open()) {
+            cout << "Error: Could not open infile!" << nn;
+            return 1;
+        }
+        
+        string line;
+ 
         // Load matrix 1
         for(int i = 0; i < dimension; i++) {
             for(int j = 0; j < dimension; j++) {
                 getline (matrixFile, line);
-                auto asdf = atoi(line.c_str());
-                M1[i][j] = asdf;
+                M1[i][j] = atoi(line.c_str());
             }
         }
         
@@ -56,6 +56,40 @@ int main(int argc, const char * argv[]) {
         
         // execute strassen's algorithm, print the result.
         matrix result = strass(M1, M2, dimension);
+        printMatrix(result, dimension);
+        cout << nn;
+    }
+    
+    else if (flag == 1) {
+        //Just use a random matrix with dimensions as proposed
+        // Load matrix 1
+        
+        // TODO abstract into "randFill" helper function
+        for(int i = 0; i < dimension; i++) {
+            for(int j = 0; j < dimension; j++) {
+                M1[i][j] = (rand() % 1024) - (1024 / 2); // -512 through 512
+                //assert(M1[i][j] >= 0);
+            }
+        }
+        
+        // Load matrix 2
+        for(int i = 0; i < dimension; i++) {
+            for(int j = 0; j < dimension; j++) {
+                M2[i][j] = (rand() % 1024) - (1024 / 2); // -512 through 512
+            }
+        }
+        
+        matrix result = strass(M1, M2, dimension);
+        matrix expected = mult(M1, M2);
+        
+        // TODO reassess testing on the fly.
+        for(int i = 0; i < dimension; i++) {
+            for(int j = 0; j < dimension; j++) {
+                assert(result[i][j] == expected[i][j]);
+                //assert(result[i][j] >= 0);
+            }
+        }
+        
         printMatrix(result, dimension);
         cout << nn;
     }
