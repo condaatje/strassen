@@ -5,12 +5,14 @@
 #include <string>
 #include <assert.h>
 #include "Main.hpp"
+#include "Helpers.hpp"
+#include "Strassen.hpp"
 
 using namespace std; // somewhat frowned upon, but fine as long as nobody is dumb and collides with std...
 const char nn = '\n';
-vector<vector<int>> stras(vector<vector<int>> M1, vector<vector<int>> M2);
-void printMatrix(vector<vector<int>> v, int d);
-
+matrix stras(matrix M1, matrix M2, int d);
+void printMatrix(matrix v, int d);
+void runTests();
 
 int main(int argc, const char * argv[]) {
     
@@ -31,8 +33,8 @@ int main(int argc, const char * argv[]) {
     }
     
     string line;
-    vector<vector<int>> M1 (dimension, std::vector<int> (dimension, 0));
-    vector<vector<int>> M2 (dimension, std::vector<int> (dimension, 0));
+    matrix M1 (dimension, vector<int> (dimension, 0));
+    matrix M2 (dimension, vector<int> (dimension, 0));
     
     if (flag == 0) {
         
@@ -54,17 +56,33 @@ int main(int argc, const char * argv[]) {
         }
         
         // execute strassen's algorithm, print the result.
-        vector<vector<int>> result = stras(M1, M2);
+        matrix result = strass(M1, M2, dimension);
         printMatrix(result, dimension);
         cout << nn;
     }
     
+    runTests();
+    
     return 0;
 }
 
+void runTests() {
+    matrix M1 = {{1, 2}, {3, 4}};
+    matrix M2 = {{5, 6}, {7, 8}};
+    
+    matrix expected = {{19, 22}, {43, 50}};
+    matrix actual = mult(M1, M2, 2);
+    matrix strassResult = mult(M1, M2, 2);
+    
+    for(int i = 0; i < 2; i++) {
+        for(int j = 0; j < 2; j++) {
+            assert(expected[i][j] == actual[i][j]);
+            assert(expected[i][j] == strassResult[i][j]); // TODO big
+        }
+    }
+}
 
-
-void printMatrix(vector<vector<int>> v, int d) {
+void printMatrix(matrix v, int d) {
     for(int i = 0; i < d; i++) {
         for(int j = 0; j < d; j++) {
             cout << v[i][j] << " ";
@@ -73,8 +91,7 @@ void printMatrix(vector<vector<int>> v, int d) {
     }
 }
 
-vector<vector<int>> stras(vector<vector<int>> M1, vector<vector<int>> M2) {
-    
-    
-    return M1; //TODO
-}
+
+
+
+
