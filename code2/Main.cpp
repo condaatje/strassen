@@ -24,10 +24,11 @@ int main(int argc, const char * argv[]) {
     }
     
     int flag = atoi(argv[1]);
-    int dimension = atoi(argv[2]);
+    int dimension = round_up_to_square(atoi(argv[2]));
+    
     matrix M1 (dimension, vector<long long> (dimension, 0));
     matrix M2 (dimension, vector<long long> (dimension, 0));
-
+    
     if (flag == 0) {
         ifstream matrixFile (argv[3]);
         
@@ -156,6 +157,8 @@ void printMatrix(matrix v, int d) {
         cout << nn;
     }
 }
+
+
 
 
 

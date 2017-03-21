@@ -1,5 +1,7 @@
 #include "Helpers.hpp"
 #include <vector>
+#include <math.h>
+#include <assert.h>
 
 using namespace std;
 
@@ -44,6 +46,20 @@ matrix mult(matrix M1, matrix M2) {
     return result;
 }
 
+
+// modified version of http://stackoverflow.com/a/1549960
+int round_up_to_square(int n) {
+    if (n < 0)
+        return false;
+    int root(round(sqrt(n)));
+    if(n == root * root) {
+        return n;
+    }
+    else {
+        assert(n < root * root); // round up
+        return root * root;
+    }
+}
 
 
 
