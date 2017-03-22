@@ -2,10 +2,10 @@
 #include <vector>
 #include <math.h>
 #include <assert.h>
-// #include <iostream>
+#include <iostream>
 
 using namespace std;
-// const char nn = '\n';
+const char nn = '\n';
 
 
 // IMPORTANT! SQUARE MATRICES ONLY! (as per the spec)
@@ -74,6 +74,15 @@ void randFill(matrix M) {
     }
 }
 
+
+void printMatrix(matrix v) {
+    for(int i = 0; i < v.size(); i++) {
+        for(int j = 0; j < v[i].size(); j++) {
+            cout << v[i][j] << " ";
+        }
+        cout << nn;
+    }
+}
 
 
 

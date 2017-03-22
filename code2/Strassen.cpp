@@ -6,11 +6,33 @@
 using namespace std;
 
 
+void load(matrix * quart, matrix * whole, int start_i, int end_i, int start_j, int end_j) {
+    //(*test.frames)[0].w;
+    // this is n^2, so may negate benefit of using strassen's.
+    for(int i = start_i; i < end_i; i++) {
+        for(int j = start_j; j < end_j; j++) {
+            (*quart)[i - start_i][j - start_j] = (*whole)[i][j];
+        }
+    }
+}
+
+void loadout(matrix * out, matrix * quart, int start_i, int end_i, int start_j, int end_j) {
+    for(int i = start_i; i < end_i; i++) {
+        for(int j = start_j; j < end_j; j++) {
+            (*out)[i][j] = (*quart)[i - start_i][j - start_j];
+        }
+    }
+}
+
 // A B E F = AE+BG AF+BH
 // C D G H   CE+DG CF+DH
-matrix strass(matrix M1, matrix M2, int d) {
+matrix strass(matrix M1, matrix M2, int bound) {
+    // TODO implement bound
+    
+    int d = (int) M1.size();
     // TODO Avoid excessive memory allocation and deallocation.
     // This requires some thinking. Will probably need to do it all in buffer(s).
+    
     matrix A (d / 2, vector<long long> (d / 2, 0));
     matrix B (d / 2, vector<long long> (d / 2, 0));
     matrix C (d / 2, vector<long long> (d / 2, 0));
@@ -20,71 +42,22 @@ matrix strass(matrix M1, matrix M2, int d) {
     matrix G (d / 2, vector<long long> (d / 2, 0));
     matrix H (d / 2, vector<long long> (d / 2, 0));
     
-    int dim = d / 2;
+    int half = d / 2;
     
-    // TODO pattern should become apparent so we can do this in a three-deep loop.
-    // Also this most likely negates any benefit - should be done in a buffer.
     // For now, just trying to get the algo to work.
     // Will hit correctness, then maintain as I optimize.
     
-    // Load A:
-    for(int i = 0; i < dim; i++) {
-        for(int j = 0; j < dim; j++) {
-            A[i][j] = M1[i][j];
-        }
-    }
-    
-    // Load B:
-    for(int i = 0; i < dim; i++) {
-        for(int j = dim; j < d; j++) {
-            B[i][j - dim] = M1[i][j];
-        }
-    }
-    
-    // Load C:
-    for(int i = dim; i < d; i++) {
-        for(int j = 0; j < dim; j++) {
-            C[i - dim][j] = M1[i][j];
-        }
-    }
-    
-    // Load D:
-    for(int i = dim; i < d; i++) {
-        for(int j = dim; j < d; j++) {
-            D[i - dim][j - dim] = M1[i][j];
-        }
-    }
-    
-    // Load E:
-    for(int i = 0; i < dim; i++) {
-        for(int j = 0; j < dim; j++) {
-            E[i][j] = M2[i][j];
-        }
-    }
-    
-    // Load F:
-    for(int i = 0; i < dim; i++) {
-        for(int j = dim; j < d; j++) {
-            F[i][j - dim] = M2[i][j];
-        }
-    }
-    
-    // Load G:
-    for(int i = dim; i < d; i++) {
-        for(int j = 0; j < dim; j++) {
-            G[i - dim][j] = M2[i][j];
-        }
-    }
-    
-    // Load H:
-    for(int i = dim; i < d; i++) {
-        for(int j = dim; j < d; j++) {
-            H[i - dim][j - dim] = M2[i][j];
-        }
-    }
+    load(&A, &M1, 0, half, 0, half);
+    load(&B, &M1, 0, half, half, d);
+    load(&C, &M1, half, d, 0, half);
+    load(&D, &M1, half, d, half, d);
+    load(&E, &M2, 0, half, 0, half);
+    load(&F, &M2, 0, half, half, d);
+    load(&G, &M2, half, d, 0, half);
+    load(&H, &M2, half, d, half, d);
     
     // TODO recursive
-    // Note: order matters in matrix mult!
+    // Remember: order matters in matrix mult! (AB != BA)
     matrix P1 = mult(A, subt(F, H)); // P1 = A(F−H)
     matrix P2 = mult(add(A, B), H);  // P2 = (A+B)H
     matrix P3 = mult(add(C, D), E);  // P3 = (C+D)E
@@ -102,33 +75,10 @@ matrix strass(matrix M1, matrix M2, int d) {
     matrix result (d, vector<long long> (d, 0));
     
     // Load output matrix
-    // Load AEBG:
-    for(int i = 0; i < dim; i++) {
-        for(int j = 0; j < dim; j++) {
-            result[i][j] = AEBG[i][j];
-        }
-    }
-    
-    // Load B:
-    for(int i = 0; i < dim; i++) {
-        for(int j = dim; j < d; j++) {
-            result[i][j] = AFBH[i][j - dim];
-        }
-    }
-    
-    // Load C:
-    for(int i = dim; i < d; i++) {
-        for(int j = 0; j < dim; j++) {
-            result[i][j] = CEDG[i - dim][j];
-        }
-    }
-    
-    // Load D:
-    for(int i = dim; i < d; i++) {
-        for(int j = dim; j < d; j++) {
-            result[i][j] = CFDH[i - dim][j - dim];
-        }
-    }
-    
-    return result; //TODO
+    loadout(&result, &AEBG, 0, half, 0, half);
+    loadout(&result, &AFBH, 0, half, half, d);
+    loadout(&result, &CEDG, half, d, 0, half);
+    loadout(&result, &CFDH, half, d, half, d);
+
+    return result;
 }

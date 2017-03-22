@@ -9,3 +9,5 @@ https://www.exploit-db.com/docs/28550.pdf
 http://stackoverflow.com/a/1549960
 http://stackoverflow.com/a/108360
 http://stackoverflow.com/a/466256
+http://stackoverflow.com/a/11587545
+http://stackoverflow.com/a/26647753
