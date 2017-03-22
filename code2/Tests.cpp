@@ -19,7 +19,7 @@ void runTests() {
     
     matrix expected = {{19, 22}, {43, 50}};
     matrix actual = mult(M1, M2);
-    matrix strassResult = strass(M1, M2, 0); //TODO bound
+    matrix strassResult = strass(M1, M2, 8);
     
     // printMatrix(expected);
     // printMatrix(strassResult);
@@ -50,7 +50,7 @@ void runTests() {
         {1354, 1412, 1470, 1528}};
     
     matrix actual2 = mult(M3, M4);
-    matrix strassResult2 = strass(M3, M4, 0); //TODO bound
+    matrix strassResult2 = strass(M3, M4, 8);
     
     //    1   250	  260	270	   280
     //    2	  618	  644	670	   696

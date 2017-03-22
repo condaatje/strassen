@@ -77,10 +77,12 @@ int main(int argc, const char * argv[]) {
             }
         }
         
-        cout << "Success!" << nn;
+    
     }
     
     runTests();
+    
+    cout << "Success!" << nn;
     
     return 0;
 }

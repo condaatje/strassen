@@ -28,6 +28,9 @@ void loadout(matrix * out, matrix * quart, int start_i, int end_i, int start_j, 
 // C D G H   CE+DG CF+DH
 matrix strass(matrix M1, matrix M2, int bound) {
     // TODO implement bound
+    if (M1.size() < bound) {
+        return mult(M1, M2);
+    }
     
     int d = (int) M1.size();
     // TODO Avoid excessive memory allocation and deallocation.
@@ -58,23 +61,21 @@ matrix strass(matrix M1, matrix M2, int bound) {
     
     // TODO recursive
     // Remember: order matters in matrix mult! (AB != BA)
-    matrix P1 = mult(A, subt(F, H)); // P1 = A(F−H)
-    matrix P2 = mult(add(A, B), H);  // P2 = (A+B)H
-    matrix P3 = mult(add(C, D), E);  // P3 = (C+D)E
-    matrix P4 = mult(D, subt(G, E)); // P4 = D(G−E)
-    matrix P5 = mult(add(A, D), add(E, H));  // P5 = (A+D)(E+H)
-    matrix P6 = mult(subt(B, D), add(G, H)); // P6 = (B−D)(G+H)
-    matrix P7 = mult(subt(A, C), add(E, F)); // P7 = (A−C)(E+F)
+    matrix P1 = strass(A, subt(F, H), bound);                // P1 = A(F−H)
+    matrix P2 = strass(add(A, B), H, bound);                 // P2 = (A+B)H
+    matrix P3 = strass(add(C, D), E, bound);                 // P3 = (C+D)E
+    matrix P4 = strass(D, subt(G, E), bound);                // P4 = D(G−E)
+    matrix P5 = strass(add(A, D), add(E, H), bound);         // P5 = (A+D)(E+H)
+    matrix P6 = strass(subt(B, D), add(G, H), bound);        // P6 = (B−D)(G+H)
+    matrix P7 = strass(subt(A, C), add(E, F), bound);        // P7 = (A−C)(E+F)
     
-    matrix AEBG = add(subt(add(P5, P4), P2), P6); // AE + BG = P5 + P4 − P2 + P6
-    matrix AFBH = add(P1, P2); // AF + BH = P1 + P2
-    matrix CEDG = add(P3, P4); // CE + DG = P3 + P4
-    matrix CFDH = subt(subt(add(P5, P1), P3), P7); // CF + DH = P5 + P1 − P3 − P7
-    
-    
-    matrix result (d, vector<long long> (d, 0));
+    matrix AEBG = add(subt(add(P5, P4), P2), P6);   // AE + BG = P5 + P4 − P2 + P6
+    matrix AFBH = add(P1, P2);                      // AF + BH = P1 + P2
+    matrix CEDG = add(P3, P4);                      // CE + DG = P3 + P4
+    matrix CFDH = subt(subt(add(P5, P1), P3), P7);  // CF + DH = P5 + P1 − P3 − P7
     
     // Load output matrix
+    matrix result (d, vector<long long> (d, 0));
     loadout(&result, &AEBG, 0, half, 0, half);
     loadout(&result, &AFBH, 0, half, half, d);
     loadout(&result, &CEDG, half, d, 0, half);
