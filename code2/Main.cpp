@@ -32,10 +32,10 @@ int main(int argc, const char * argv[]) {
     int dimension = round_up_to_power_of_2(atoi(argv[2]));
     // TODO return matrix should not have padding zeroes.
     
-    vector<vector<long>> mm1 (dimension, vector<long> (dimension, 0));
-    vector<vector<long>> mm2 (dimension, vector<long> (dimension, 0));
-    Matrix M1 = Matrix(0, 0, dimension, &mm1);
-    Matrix M2 = Matrix(0, 0, dimension, &mm2);
+    rawMatrix mm1 (dimension, vector<long> (dimension, 0));
+    rawMatrix mm2 (dimension, vector<long> (dimension, 0));
+    Matrix M1 = Matrix(0, 0, dimension, make_shared<rawMatrix>(mm1));
+    Matrix M2 = Matrix(0, 0, dimension, make_shared<rawMatrix>(mm2));
     
     if (flag == 0) {
         ifstream matrixFile (argv[3]);
@@ -65,7 +65,7 @@ int main(int argc, const char * argv[]) {
         
         // execute strassen's algorithm, print the result.
         vector<vector<long>> om (dimension, vector<long> (dimension, 0));
-        Matrix O = Matrix(0, 0, dimension, &om);
+        Matrix O = Matrix(0, 0, dimension, make_shared<rawMatrix>(om));
         Matrix result = strass(O, M1, M2, 64); // TODO bound
         
         printMatrix(result);
@@ -82,8 +82,8 @@ int main(int argc, const char * argv[]) {
         
         while (bound < dimension) {
             auto begin = high_resolution_clock::now();
-            vector<vector<long>> oRaw (dimension, vector<long> (dimension, 0));
-            Matrix O = Matrix(0, 0, dimension, &oRaw);
+            rawMatrix oRaw (dimension, vector<long> (dimension, 0));
+            Matrix O = Matrix(0, 0, dimension, make_shared<rawMatrix>(oRaw));
             
             Matrix result = strass(O, M1, M2, bound);
             auto end = high_resolution_clock::now();

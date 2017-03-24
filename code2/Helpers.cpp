@@ -15,8 +15,8 @@ Matrix subt(Matrix M1, Matrix M2) {
     int d = M1.d;
     
     // TODO memory leaks! (Shared pointers?)
-    vector<vector<long>> * om = new vector<vector<long>> (d, vector<long> (d, 0));
-    Matrix O = Matrix(0, 0, d, om);
+    rawMatrix om (d, vector<long> (d, 0));
+    Matrix O = Matrix(0, 0, d, make_shared<rawMatrix>(om));
     
     for(int i = 0; i < d; i++) {
         for(int j = 0; j < d; j++) {
@@ -33,8 +33,8 @@ Matrix add(Matrix M1, Matrix M2) {
     int d = M1.d;
     
     // TODO memory leaks! (Shared pointers?)
-    vector<vector<long>> * om = new vector<vector<long>> (d, vector<long> (d, 0));
-    Matrix O = Matrix(0, 0, d, om);
+    rawMatrix om (d, vector<long> (d, 0));
+    Matrix O = Matrix(0, 0, d, make_shared<rawMatrix>(om));
     // Also this should be taken out so we can be filling the out buffer instead.
 
     for(int i = 0; i < d; i++) {
@@ -50,8 +50,8 @@ Matrix add(Matrix M1, Matrix M2) {
 Matrix mult(Matrix M1, Matrix M2) {
     int d = M1.d;
     
-    vector<vector<long>> * om = new vector<vector<long>> (d, vector<long> (d, 0));
-    Matrix O = Matrix(0, 0, d, om);
+    rawMatrix om (d, vector<long> (d, 0));
+    Matrix O = Matrix(0, 0, d, make_shared<rawMatrix>(om));
     
     for(int i = 0; i < d; i++) {
         for(int j = 0; j < d; j++) {
@@ -113,5 +113,31 @@ bool compare(Matrix M1, Matrix M2) {
     }
     return true;
 }
+
+Matrix cpy(Matrix M) {
+    rawMatrix mm1 (M.d, vector<long> (M.d, 0));
+    Matrix N = Matrix(M.i0, M.j0, M.d, make_shared<rawMatrix>(mm1));
+    
+    for(int i = 0; i < M.d; i++) {
+        for(int j = 0; j < M.d; j++) {
+            (*N.m)[M.i0 + i][M.j0 + j] = (*M.m)[M.i0 + i][M.j0 + j];
+        }
+    }
+    
+    return N;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
