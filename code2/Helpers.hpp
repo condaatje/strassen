@@ -34,7 +34,8 @@ Matrix add(Matrix M1, Matrix M2);
 
 int round_up_to_power_of_2(int n);
 void randFill(Matrix M);
-void printMatrix(Matrix v);
+void printMatrix(Matrix M);
+void staffPrint(Matrix M);
 
 struct Trial {
     chrono::nanoseconds ns;

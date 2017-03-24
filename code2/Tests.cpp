@@ -1,11 +1,3 @@
-//
-//  Tests.cpp
-//  code2
-//
-//  Created by Eagle on 3/21/17.
-//  Copyright © 2017 Ondaatje124. All rights reserved.
-//
-
 #include "Tests.hpp"
 #include "Helpers.hpp"
 #include "Strassen.hpp"
@@ -44,27 +36,22 @@ void test0() {
 void test1() {
     // 1 2  *  5 6 = 19 22
     // 3 4     7 8   43 50
-    
+    int d = 2;
     rawMatrix rm1 = {{1, 2}, {3, 4}};
     rawMatrix rm2 = {{5, 6}, {7, 8}};
     
-    Matrix M1 = Matrix(0, 0, 2, make_shared<rawMatrix>(rm1));
-    Matrix M2 = Matrix(0, 0, 2, make_shared<rawMatrix>(rm2));
+    Matrix M1 = Matrix(0, 0, d, make_shared<rawMatrix>(rm1));
+    Matrix M2 = Matrix(0, 0, d, make_shared<rawMatrix>(rm2));
     
     rawMatrix rmE = {{19, 22}, {43, 50}};
-    Matrix expected = Matrix(0, 0, 2, make_shared<rawMatrix>(rmE));
+    Matrix expected = Matrix(0, 0, d, make_shared<rawMatrix>(rmE));
     
-    rawMatrix rmO1 = {{0, 0}, {0, 0}};
-    //Matrix O1 = Matrix(0, 0, 2, &rmO1);
-    
-    rawMatrix rmO2 = {{0, 0}, {0, 0}};
-    Matrix O2 = Matrix(0, 0, 2, make_shared<rawMatrix>(rmO2));
+    // extra space
+    rawMatrix b (d * 2, vector<long> (d * 2, 0));
+    Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
     
     Matrix actual = mult(M1, M2);
-    Matrix strassResult = strass(O2, M1, M2, 8);
-    
-    // printMatrix(expected);
-    // printMatrix(strassResult);
+    Matrix strassResult = strass(buffer, M1, M2, 8);
     
     if (!compare(expected, actual)) {
         printMatrix(expected);
@@ -78,13 +65,7 @@ void test1() {
 }
 
 void test2() {
-    // TODO better way of putting together a matrix from scratch.
-    
-    vector<vector<long>> rmO3 (4, vector<long> (4, 0));
-    vector<vector<long>> rmO4 (4, vector<long> (4, 0));
-    //Matrix O3 = Matrix(0, 0, 4, &rmO3);
-    Matrix O4 = Matrix(0, 0, 4, make_shared<rawMatrix>(rmO4));
-    
+    int d = 4;
     rawMatrix rm3 = {
         {1,  2,  3,  4 },
         {5,  6,  7,  8 },
@@ -97,8 +78,8 @@ void test2() {
         {25, 26, 27, 28},
         {29, 30, 31, 32}};
     
-    Matrix M3 = Matrix(0, 0, 4, make_shared<rawMatrix>(rm3));
-    Matrix M4 = Matrix(0, 0, 4, make_shared<rawMatrix>(rm4));
+    Matrix M3 = Matrix(0, 0, d, make_shared<rawMatrix>(rm3));
+    Matrix M4 = Matrix(0, 0, d, make_shared<rawMatrix>(rm4));
     
     rawMatrix rmE = {
         {250,  260,  270,  280},
@@ -106,9 +87,13 @@ void test2() {
         {986,  1028, 1070, 1112},
         {1354, 1412, 1470, 1528}};
     
-    Matrix expected = Matrix(0, 0, 4, make_shared<rawMatrix>(rmE));
+    // extra space
+    rawMatrix b (d * 2, vector<long> (d * 2, 0));
+    Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
+    
+    Matrix expected = Matrix(0, 0, d, make_shared<rawMatrix>(rmE));
     Matrix actual = mult(M3, M4);
-    Matrix strassResult = strass(O4, M3, M4, 2);
+    Matrix strassResult = strass(buffer, M3, M4, 2);
     
     if (!compare(expected, actual)) {
         assert(false);
@@ -122,18 +107,21 @@ void test2() {
 }
 
 void test3() {
-    vector<vector<long>> raw1 (512, vector<long> (512, 0));
-    vector<vector<long>> raw2 (512, vector<long> (512, 0));
-    vector<vector<long>> oRaw (512, vector<long> (512, 0));
-    Matrix M1 = Matrix(0, 0, 512, make_shared<rawMatrix>(raw1));
-    Matrix M2 = Matrix(0, 0, 512, make_shared<rawMatrix>(raw2));
-    Matrix O = Matrix(0, 0, 512, make_shared<rawMatrix>(oRaw));
+    int d = 512;
+    rawMatrix raw1 (d, vector<long> (d, 0));
+    rawMatrix raw2 (d, vector<long> (d, 0));
+    Matrix M1 = Matrix(0, 0, d, make_shared<rawMatrix>(raw1));
+    Matrix M2 = Matrix(0, 0, d, make_shared<rawMatrix>(raw2));
     
     randFill(M1);
     randFill(M2);
     
+    // extra space
+    rawMatrix b (d * 2, vector<long> (d * 2, 0));
+    Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
+    
     Matrix actual = mult(M1, M2);
-    Matrix strassResult = strass(O, M1, M2, 64);
+    Matrix strassResult = strass(buffer, M1, M2, 64);
     
     if (!compare(actual, strassResult)) {
         assert(false);

@@ -20,22 +20,24 @@ int main(int argc, const char * argv[]) {
     
     if(argc != 4) {
         cout << "Usage: ./strassen <flag> <dimension> <inputfile>" << nn;
-        cout << "0: Staff, 1: Random" << nn;        
+        cout << "0: Staff, 1: Find Optimal" << nn;
         return 1;
     }
     
-    runTests();
-    
-    cout << "Tests Passed!" << nn;
-    
     int flag = atoi(argv[1]);
-    int dimension = round_up_to_power_of_2(atoi(argv[2]));
-    // TODO return matrix should not have padding zeroes.
     
-    rawMatrix mm1 (dimension, vector<long> (dimension, 0));
-    rawMatrix mm2 (dimension, vector<long> (dimension, 0));
-    Matrix M1 = Matrix(0, 0, dimension, make_shared<rawMatrix>(mm1));
-    Matrix M2 = Matrix(0, 0, dimension, make_shared<rawMatrix>(mm2));
+    if (flag != 0) {
+        runTests();
+        cout << "Tests Passed!" << nn;
+    }
+    
+    int originalDimension = atoi(argv[2]);
+    int d = round_up_to_power_of_2(originalDimension);
+    
+    rawMatrix mm1 (d, vector<long> (d, 0));
+    rawMatrix mm2 (d, vector<long> (d, 0));
+    Matrix M1 = Matrix(0, 0, d, make_shared<rawMatrix>(mm1));
+    Matrix M2 = Matrix(0, 0, d, make_shared<rawMatrix>(mm2));
     
     if (flag == 0) {
         ifstream matrixFile (argv[3]);
@@ -48,61 +50,62 @@ int main(int argc, const char * argv[]) {
         string line;
  
         // Load matrix 1
-        for(int i = 0; i < dimension; i++) {
-            for(int j = 0; j < dimension; j++) {
+        for(int i = 0; i < d; i++) {
+            for(int j = 0; j < d; j++) {
                 getline (matrixFile, line);
-                (*M1.m)[i][j] = atoi(line.c_str());
+                int x = atoi(line.c_str());
+                (*M1.m)[i][j] = x;
             }
         }
         
         // Load matrix 2
-        for(int i = 0; i < dimension; i++) {
-            for(int j = 0; j < dimension; j++) {
+        for(int i = 0; i < d; i++) {
+            for(int j = 0; j < d; j++) {
                 getline (matrixFile, line);
                 (*M2.m)[i][j] = atoi(line.c_str());
             }
         }
+        // extra space
+        rawMatrix b (d * 2, vector<long> (d * 2, 0));
+        Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
         
         // execute strassen's algorithm, print the result.
-        vector<vector<long>> om (dimension, vector<long> (dimension, 0));
-        Matrix O = Matrix(0, 0, dimension, make_shared<rawMatrix>(om));
-        Matrix result = strass(O, M1, M2, 64); // TODO bound
+        Matrix result = strass(buffer, M1, M2, 128); // TODO bound
+        Matrix check = mult(M1, M2);
+        assert(compare(result, check));
         
-        printMatrix(result);
-        
+        result.d = originalDimension;
+        staffPrint(result);
         cout << nn;
     }
-    
-    else if (flag == 1) {
+    else if (flag == 1) { // Find optimum
         // Just use a random matrix with dimensions as proposed
         randFill(M1);
         randFill(M2);
-        int bound = 16;
+        int bound = 16; // Start at a reasonable number, otherwise it takes forever
         long long prevTime = LLONG_MAX;
         
-        while (bound < dimension) {
+        while (bound < d) {
             auto begin = high_resolution_clock::now();
-            rawMatrix oRaw (dimension, vector<long> (dimension, 0));
-            Matrix O = Matrix(0, 0, dimension, make_shared<rawMatrix>(oRaw));
+    
+            rawMatrix b (d * 2, vector<long> (d * 2, 0));
+            Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
             
-            Matrix result = strass(O, M1, M2, bound);
+            Matrix result = strass(buffer, M1, M2, bound);
             auto end = high_resolution_clock::now();
             auto time = duration_cast<nanoseconds>(end-begin).count();
 
             // If this bound resulted in worse performance than the previous bound, then the optimal bound was the last one.
             if (time > prevTime) {
                 cout << result.d << nn; // no optimizey guy.
-                cout << "proper bound: " << bound / 2 << nn;
+                cout << "Optimal crossover: " << bound / 2 << nn;
                 break;
             }
             
             prevTime = time;
             bound = bound * 2;
         }
-        
     }
-    
-    cout << "Success!" << nn;
     
     return 0;
 }

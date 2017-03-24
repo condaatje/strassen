@@ -92,12 +92,19 @@ void randFill(Matrix M) {
     }
 }
 
-void printMatrix(Matrix V) {
-    for(int i = 0; i < V.d; i++) {
-        for(int j = 0; j < V.d; j++) {
-            cout << (*V.m)[i][j] << " ";
+void printMatrix(Matrix M) {
+    for(int i = 0; i < M.d; i++) {
+        for(int j = 0; j < M.d; j++) {
+            cout << (*M.m)[i][j] << " ";
         }
         cout << nn;
+    }
+    cout << nn;
+}
+
+void staffPrint(Matrix M) {
+    for(int i = 0; i < M.d; i++) {
+        cout << (*M.m)[i][i] << nn;
     }
     cout << nn;
 }
