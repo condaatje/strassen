@@ -13,7 +13,6 @@ void loadout(Matrix out, Matrix quart, int r, int c) {
     }
 }
 
-
 // A B E F = AE+BG AF+BH
 // C D G H   CE+DG CF+DH
 Matrix strass(Matrix buffer, Matrix M1, Matrix M2, int bound) {
@@ -49,7 +48,7 @@ Matrix strass(Matrix buffer, Matrix M1, Matrix M2, int bound) {
     
                                 // A B E F = AE+BG AF+BH
     // Load output Matrix       // C D G H   CE+DG CF+DH
-    rawMatrix om (d, vector<long> (d, 0));
+    rawMatrix om (d, rawRow (d, 0));
     Matrix Out = Matrix(0, 0, d, make_shared<rawMatrix>(om));
     loadout(Out, AEBG, 0, 0);
     loadout(Out, AFBH, 0, half);

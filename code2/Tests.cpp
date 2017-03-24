@@ -4,8 +4,6 @@
 #include <assert.h>
 #include <iostream>
 
-//const char nn = '\n';
-
 void test0() {
     rawMatrix rm1 = {{1, 2}, {3, 4}};
     rawMatrix rm2 = {{5, 6}, {7, 8}};
@@ -46,8 +44,7 @@ void test1() {
     rawMatrix rmE = {{19, 22}, {43, 50}};
     Matrix expected = Matrix(0, 0, d, make_shared<rawMatrix>(rmE));
     
-    // extra space
-    rawMatrix b (d * 2, vector<long> (d * 2, 0));
+    rawMatrix b (d * 2, rawRow (d * 2, 0));
     Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
     
     Matrix actual = mult(M1, M2);
@@ -87,8 +84,7 @@ void test2() {
         {986,  1028, 1070, 1112},
         {1354, 1412, 1470, 1528}};
     
-    // extra space
-    rawMatrix b (d * 2, vector<long> (d * 2, 0));
+    rawMatrix b (d * 2, rawRow (d * 2, 0));
     Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
     
     Matrix expected = Matrix(0, 0, d, make_shared<rawMatrix>(rmE));
@@ -108,16 +104,15 @@ void test2() {
 
 void test3() {
     int d = 512;
-    rawMatrix raw1 (d, vector<long> (d, 0));
-    rawMatrix raw2 (d, vector<long> (d, 0));
+    rawMatrix raw1 (d, rawRow (d, 0));
+    rawMatrix raw2 (d, rawRow (d, 0));
     Matrix M1 = Matrix(0, 0, d, make_shared<rawMatrix>(raw1));
     Matrix M2 = Matrix(0, 0, d, make_shared<rawMatrix>(raw2));
     
     randFill(M1);
     randFill(M2);
     
-    // extra space
-    rawMatrix b (d * 2, vector<long> (d * 2, 0));
+    rawMatrix b (d * 2, rawRow (d * 2, 0));
     Matrix buffer = Matrix(0, 0, d * 2, make_shared<rawMatrix>(b));
     
     Matrix actual = mult(M1, M2);
@@ -126,7 +121,6 @@ void test3() {
     if (!compare(actual, strassResult)) {
         assert(false);
     }
-    
 }
 
 

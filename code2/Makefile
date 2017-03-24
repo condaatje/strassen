@@ -5,7 +5,6 @@ CFLAGS = -Wall -c -std=c++11 -Ofast $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
 
-
 all: strassen
 
 strassen : $(OBJS)
