@@ -7,6 +7,6 @@
 
 using namespace std;
 
-matrix strass(matrix M1, matrix M2, int d);
+Matrix strass(Matrix O, Matrix M1, Matrix M2, int bound);
 
 #endif /* Strassen_hpp */

@@ -9,11 +9,11 @@
 #include "Strassen.hpp"
 #include "Tests.hpp"
 
+// make clean && make && echo "Starting..." && ./strassen 1 1024 "matrices.txt"
+
 using namespace std; // somewhat frowned upon, but fine as long as nobody is dumb and collides with std...
 using namespace chrono;
 const char nn = '\n';
-matrix stras(matrix M1, matrix M2, int d);
-
 
 
 int main(int argc, const char * argv[]) {
@@ -24,12 +24,18 @@ int main(int argc, const char * argv[]) {
         return 1;
     }
     
+    runTests();
+    
+    cout << "Tests Passed!" << nn;
+    
     int flag = atoi(argv[1]);
     int dimension = round_up_to_power_of_2(atoi(argv[2]));
     // TODO return matrix should not have padding zeroes.
     
-    matrix M1 (dimension, vector<long long> (dimension, 0));
-    matrix M2 (dimension, vector<long long> (dimension, 0));
+    vector<vector<long>> mm1 (dimension, vector<long> (dimension, 0));
+    vector<vector<long>> mm2 (dimension, vector<long> (dimension, 0));
+    Matrix M1 = Matrix(0, 0, dimension, &mm1);
+    Matrix M2 = Matrix(0, 0, dimension, &mm2);
     
     if (flag == 0) {
         ifstream matrixFile (argv[3]);
@@ -45,7 +51,7 @@ int main(int argc, const char * argv[]) {
         for(int i = 0; i < dimension; i++) {
             for(int j = 0; j < dimension; j++) {
                 getline (matrixFile, line);
-                M1[i][j] = atoi(line.c_str());
+                (*M1.m)[i][j] = atoi(line.c_str());
             }
         }
         
@@ -53,12 +59,14 @@ int main(int argc, const char * argv[]) {
         for(int i = 0; i < dimension; i++) {
             for(int j = 0; j < dimension; j++) {
                 getline (matrixFile, line);
-                M2[i][j] = atoi(line.c_str());
+                (*M2.m)[i][j] = atoi(line.c_str());
             }
         }
         
         // execute strassen's algorithm, print the result.
-        matrix result = strass(M1, M2, dimension);
+        vector<vector<long>> om (dimension, vector<long> (dimension, 0));
+        Matrix O = Matrix(0, 0, dimension, &om);
+        Matrix result = strass(O, M1, M2, 64); // TODO bound
         
         printMatrix(result);
         
@@ -70,18 +78,20 @@ int main(int argc, const char * argv[]) {
         randFill(M1);
         randFill(M2);
         int bound = 16;
-        long long prevTime = LONG_LONG_MAX;
-        
-        vector<Trial> results;
+        long long prevTime = LLONG_MAX;
         
         while (bound < dimension) {
             auto begin = high_resolution_clock::now();
-            matrix result = strass(M1, M2, bound);
+            vector<vector<long>> oRaw (dimension, vector<long> (dimension, 0));
+            Matrix O = Matrix(0, 0, dimension, &oRaw);
+            
+            Matrix result = strass(O, M1, M2, bound);
             auto end = high_resolution_clock::now();
             auto time = duration_cast<nanoseconds>(end-begin).count();
 
             // If this bound resulted in worse performance than the previous bound, then the optimal bound was the last one.
             if (time > prevTime) {
+                cout << result.d << nn; // no optimizey guy.
                 cout << "proper bound: " << bound / 2 << nn;
                 break;
             }
@@ -91,8 +101,6 @@ int main(int argc, const char * argv[]) {
         }
         
     }
-    
-    runTests();
     
     cout << "Success!" << nn;
     

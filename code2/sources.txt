@@ -11,6 +11,8 @@ http://stackoverflow.com/a/108360
 http://stackoverflow.com/a/466256
 http://stackoverflow.com/a/11587545
 http://stackoverflow.com/a/26647753
+https://lists.nongnu.org/archive/html/qemu-devel/2014-05/msg03631.html
+http://stackoverflow.com/a/26734543
 
 
 
