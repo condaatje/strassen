@@ -3,12 +3,14 @@
 #include <fstream>
 #include <string>
 #include <assert.h>
+#include <chrono>
 #include "Main.hpp"
 #include "Helpers.hpp"
 #include "Strassen.hpp"
 #include "Tests.hpp"
 
 using namespace std; // somewhat frowned upon, but fine as long as nobody is dumb and collides with std...
+using namespace chrono;
 const char nn = '\n';
 matrix stras(matrix M1, matrix M2, int d);
 
@@ -24,6 +26,7 @@ int main(int argc, const char * argv[]) {
     
     int flag = atoi(argv[1]);
     int dimension = round_up_to_power_of_2(atoi(argv[2]));
+    // TODO return matrix should not have padding zeroes.
     
     matrix M1 (dimension, vector<long long> (dimension, 0));
     matrix M2 (dimension, vector<long long> (dimension, 0));
@@ -64,20 +67,29 @@ int main(int argc, const char * argv[]) {
     
     else if (flag == 1) {
         // Just use a random matrix with dimensions as proposed
-        
         randFill(M1);
         randFill(M2);
+        int bound = 16;
+        long long prevTime = LONG_LONG_MAX;
         
-        matrix result = strass(M1, M2, dimension);
-        matrix expected = mult(M1, M2);
+        vector<Trial> results;
         
-        for(int i = 0; i < dimension; i++) {
-            for(int j = 0; j < dimension; j++) {
-                assert(result[i][j] == expected[i][j]);
+        while (bound < dimension) {
+            auto begin = high_resolution_clock::now();
+            matrix result = strass(M1, M2, bound);
+            auto end = high_resolution_clock::now();
+            auto time = duration_cast<nanoseconds>(end-begin).count();
+
+            // If this bound resulted in worse performance than the previous bound, then the optimal bound was the last one.
+            if (time > prevTime) {
+                cout << "proper bound: " << bound / 2 << nn;
+                break;
             }
+            
+            prevTime = time;
+            bound = bound * 2;
         }
         
-    
     }
     
     runTests();

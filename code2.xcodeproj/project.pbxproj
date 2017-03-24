@@ -34,6 +34,7 @@
 		D9269C451E80C73C002F9D65 /* Strassen.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Strassen.hpp; sourceTree = "<group>"; };
 		D9269C471E81F369002F9D65 /* Tests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tests.cpp; sourceTree = "<group>"; };
 		D9269C481E81F369002F9D65 /* Tests.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tests.hpp; sourceTree = "<group>"; };
+		D9A66FAF1E832409003BEA58 /* Calculations.xlsx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Calculations.xlsx; sourceTree = "<group>"; };
 		D9BE1E8E1E7DFE4100A1A486 /* code2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = code2; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9BE1E981E805B0D00A1A486 /* sources.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.txt; sourceTree = "<group>"; };
 		D9BE1E991E805B3000A1A486 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -85,6 +86,7 @@
 				D9BE1E991E805B3000A1A486 /* Makefile */,
 				D9269C391E80BDEB002F9D65 /* spec.pdf */,
 				D9269C381E80BDD6002F9D65 /* L8.pdf */,
+				D9A66FAF1E832409003BEA58 /* Calculations.xlsx */,
 			);
 			path = code2;
 			sourceTree = "<group>";
